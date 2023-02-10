@@ -52,22 +52,20 @@ where
             .to_string();
 
         // TODO Add this form field?
-        // let url = format!(
-        //         "{}/{}/{}",
-        //         SHDW_DRIVE_OBJECT_PREFIX,
-        //         storage_account_key.to_string(),
-        //         data.name()
-        //     );
+        let url = format!(
+                 "{}/{}/{}",
+                 SHDW_DRIVE_OBJECT_PREFIX,
+                 storage_account_key.to_string(),
+                 data.name());
         let form = Form::new()
             .part("file", data.into_form_part().await?)
             .part("signer", Part::text(self.wallet.pubkey().to_string()))
             .part("message", Part::text(signature))
+            .part("url", Part::text(url))
             .part(
                 "storage_account",
                 Part::text(storage_account_key.to_string()),
-            );
-            // TODO This needs to be added, but it's oddly causing a missing field "message" when added
-            //.part("url", Part::text(url));
+            );    
 
         let response = self
             .http_client
